@@ -42,7 +42,32 @@
 
 		<dependency>
 			<groupId>com.aklimets.pet</groupId>
+			<artifactId>model</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aklimets.pet</groupId>
 			<artifactId>api-docs</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aklimets.pet</groupId>
+			<artifactId>util</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
