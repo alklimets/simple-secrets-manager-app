@@ -44,6 +44,12 @@
 			<groupId>com.aklimets.pet</groupId>
 			<artifactId>model</artifactId>
 			<version>1.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jakarta.persistence</groupId>
+					<artifactId>jakarta.persistence-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
