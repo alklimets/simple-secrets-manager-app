@@ -25,9 +25,22 @@ public class ApiKey {
 
     private LocalDateTime expiresAt;
 
+    private Integer expiresAfterDays;
+
     private ApiKeyStatus status;
 
     protected ApiKey() {
+    }
+
+    public void rotateApikey(String apiKey, LocalDateTime now) {
+        this.apiKey = apiKey;
+        if (type == ApiKeyType.LIMITED) {
+            expiresAt = now.plusDays(expiresAfterDays);
+        }
+    }
+
+    public void revoke() {
+        status = ApiKeyStatus.REVOKED;
     }
 
 }
