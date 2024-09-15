@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.dto.response;
+package com.aklimets.pet.domain.dto.response.apikey;
 
 import com.aklimets.pet.domain.model.apikey.attribute.ApiKeyStatus;
 

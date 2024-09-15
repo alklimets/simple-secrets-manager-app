@@ -38,4 +38,12 @@ public class OpenApiConfiguration {
                 .pathsToMatch("/api/v1/api-keys/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi keysApi() {
+        return GroupedOpenApi.builder()
+                .group("keys")
+                .pathsToMatch("/api/v1/keys/**")
+                .build();
+    }
 }

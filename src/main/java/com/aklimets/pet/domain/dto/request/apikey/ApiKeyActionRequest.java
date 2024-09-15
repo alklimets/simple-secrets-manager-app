@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.dto.request;
+package com.aklimets.pet.domain.dto.request.apikey;
 
 import jakarta.validation.constraints.NotNull;
 

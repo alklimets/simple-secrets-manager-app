@@ -1,10 +1,10 @@
 package com.aklimets.pet.application.service.apikey;
 
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
-import com.aklimets.pet.domain.dto.request.ApiKeyActionRequest;
-import com.aklimets.pet.domain.dto.request.ApiKeyGenerationRequest;
-import com.aklimets.pet.domain.dto.response.ApiKeyResponse;
-import com.aklimets.pet.domain.dto.response.ApiKeyRevokeResponse;
+import com.aklimets.pet.domain.dto.request.apikey.ApiKeyActionRequest;
+import com.aklimets.pet.domain.dto.request.apikey.ApiKeyGenerationRequest;
+import com.aklimets.pet.domain.dto.response.apikey.ApiKeyResponse;
+import com.aklimets.pet.domain.dto.response.apikey.ApiKeyRevokeResponse;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.apikey.ApiKeyFactory;
 import com.aklimets.pet.domain.model.apikey.ApiKeyRepository;
@@ -14,8 +14,6 @@ import com.aklimets.pet.domain.service.ApiKeyDomainService;
 import com.aklimets.pet.util.datetime.TimeSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
 
 @ApplicationService
 @AllArgsConstructor

@@ -1,10 +1,10 @@
 package com.aklimets.pet.adapter.controller;
 
 import com.aklimets.pet.application.service.apikey.ApiKeyAppService;
-import com.aklimets.pet.domain.dto.request.ApiKeyActionRequest;
-import com.aklimets.pet.domain.dto.request.ApiKeyGenerationRequest;
-import com.aklimets.pet.domain.dto.response.ApiKeyResponse;
-import com.aklimets.pet.domain.dto.response.ApiKeyRevokeResponse;
+import com.aklimets.pet.domain.dto.request.apikey.ApiKeyActionRequest;
+import com.aklimets.pet.domain.dto.request.apikey.ApiKeyGenerationRequest;
+import com.aklimets.pet.domain.dto.response.apikey.ApiKeyResponse;
+import com.aklimets.pet.domain.dto.response.apikey.ApiKeyRevokeResponse;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
