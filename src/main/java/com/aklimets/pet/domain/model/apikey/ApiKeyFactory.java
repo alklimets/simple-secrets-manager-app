@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import static com.aklimets.pet.domain.model.apikey.attribute.ApiKeyStatus.ACTIVE;
@@ -34,7 +36,8 @@ public class ApiKeyFactory {
                 request.type(),
                 calculateExpirationDate(request),
                 request.expireAfterDays(),
-                ACTIVE
+                ACTIVE,
+                new LinkedList<>()
         );
     }
 

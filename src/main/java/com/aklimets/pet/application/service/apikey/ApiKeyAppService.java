@@ -9,10 +9,13 @@ import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.apikey.ApiKeyFactory;
 import com.aklimets.pet.domain.model.apikey.ApiKeyRepository;
 import com.aklimets.pet.domain.model.apikey.attribute.ApiKeyStatus;
+import com.aklimets.pet.domain.model.apikey.history.ApiKeyHistory;
 import com.aklimets.pet.domain.service.ApiKeyDomainService;
 import com.aklimets.pet.util.datetime.TimeSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDateTime;
 
 @ApplicationService
 @AllArgsConstructor
@@ -44,8 +47,13 @@ public class ApiKeyAppService {
     public ApiKeyResponse rotate(ApiKeyActionRequest request) {
         var apiKey = apiKeyRepository.findByApiKey(request.apiKey())
                 .orElseThrow(() -> new NotFoundException("Not found", "Api key not found"));
+
+        var previousApiKey = apiKey.getApiKey();
         var newApiKey = apiKeyDomainService.generateApiKey();
-        apiKey.rotateApikey(newApiKey, timeSource.getCurrentLocalDateTime());
+        var now = timeSource.getCurrentLocalDateTime();
+
+        apiKey.rotateApikey(newApiKey, now);
+        apiKey.getHistory().add(0, new ApiKeyHistory(previousApiKey, now));
         apiKeyRepository.save(apiKey);
         return new ApiKeyResponse(newApiKey);
     }
