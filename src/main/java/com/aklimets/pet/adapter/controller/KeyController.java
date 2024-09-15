@@ -6,9 +6,11 @@ import com.aklimets.pet.domain.dto.response.key.GeneratedKeyResponse;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +27,7 @@ public class KeyController {
     @DefaultSwaggerEndpoint
     @Operation(summary = "Generate RSA key pair")
     @PostMapping("/generate")
-    public GeneratedKeyResponse generate(KeyGenerationRequest request) throws Exception {
+    public GeneratedKeyResponse generate(@Valid @RequestBody KeyGenerationRequest request) throws Exception {
         return keyAppService.generate(request, "fake-api-key");
     }
 }
