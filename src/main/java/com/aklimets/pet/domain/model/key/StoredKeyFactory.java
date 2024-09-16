@@ -1,6 +1,6 @@
 package com.aklimets.pet.domain.model.key;
 
-import com.aklimets.pet.domain.dto.key.KeyDTO;
+import com.aklimets.pet.domain.dto.key.StoredKeyCreationDTO;
 import com.aklimets.pet.domain.model.key.keyversion.KeyVersion;
 import com.aklimets.pet.domain.model.key.keyversion.attribute.KeyVersionState;
 import com.aklimets.pet.domain.model.key.keyversion.keypair.StoredKeyPair;
@@ -19,7 +19,7 @@ public class StoredKeyFactory {
 
     private final TimeSource timeSource;
 
-    public StoredKey create(KeyDTO keyDTO) {
+    public StoredKey create(StoredKeyCreationDTO keyDTO) {
         var keyPair = new StoredKeyPair(keyDTO.publicKey(), keyDTO.privateKey());
         var keyVersion = new KeyVersion(
                 UUID.randomUUID().toString(),

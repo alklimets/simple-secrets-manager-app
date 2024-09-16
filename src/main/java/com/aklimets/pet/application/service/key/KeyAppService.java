@@ -2,13 +2,18 @@ package com.aklimets.pet.application.service.key;
 
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.crypto.util.AsymmetricKeyUtil;
-import com.aklimets.pet.domain.dto.key.KeyDTO;
+import com.aklimets.pet.domain.dto.key.StoredKeyCreationDTO;
 import com.aklimets.pet.domain.dto.request.key.KeyGenerationRequest;
 import com.aklimets.pet.domain.dto.response.key.GeneratedKeyResponse;
+import com.aklimets.pet.domain.dto.response.key.StoredKeyDTO;
+import com.aklimets.pet.domain.dto.response.key.StoredKeysResponse;
+import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.model.key.StoredKeyFactory;
 import com.aklimets.pet.domain.model.key.StoredKeyRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @ApplicationService
 @AllArgsConstructor
@@ -22,8 +27,11 @@ public class KeyAppService {
     private final StoredKeyRepository storedKeyRepository;
 
     public GeneratedKeyResponse generate(KeyGenerationRequest request, String apiKey) throws Exception {
+        if (storedKeyRepository.existsByApiKeyAndKeyName(apiKey, request.keyName())) {
+            throw new BadRequestException("Error exists", "Key with name " + request.keyName() + " already exists");
+        }
         var keyPair = asymmetricKeyUtil.generateEncodedKeyPair(request.algorithm());
-        var keyDTO = new KeyDTO(
+        var keyDTO = new StoredKeyCreationDTO(
                 apiKey,
                 request.keyName(),
                 request.algorithm().getAlgorithm(),
@@ -36,5 +44,11 @@ public class KeyAppService {
                 storedKey.getKeyName(),
                 storedKey.getAlgorithm(),
                 storedKey.getCreatedAt().toString());
+    }
+
+    public StoredKeysResponse getKeys(String apiKey) {
+        var apiKeys = storedKeyRepository.findAllByApiKey(apiKey);
+        return new StoredKeysResponse(apiKeys);
+
     }
 }
