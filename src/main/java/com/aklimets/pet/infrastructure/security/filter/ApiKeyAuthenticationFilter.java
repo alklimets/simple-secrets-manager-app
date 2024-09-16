@@ -2,6 +2,7 @@ package com.aklimets.pet.infrastructure.security.filter;
 
 import com.aklimets.pet.domain.dto.authentication.KeyAuthentication;
 import com.aklimets.pet.domain.model.apikey.ApiKeyRepository;
+import com.aklimets.pet.domain.model.apikey.attribute.ApiKeyStatus;
 import com.aklimets.pet.infrastructure.security.handler.KeySuccessHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import java.io.IOException;
 
@@ -25,6 +28,10 @@ public class ApiKeyAuthenticationFilter extends AbstractAuthenticationProcessing
                                       AuthenticationManager authenticationManager,
                                       KeySuccessHandler keySuccessHandler) {
         super("/api/v1/keys/**");
+        setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(
+                new AntPathRequestMatcher("/api/v1/keys/**"),
+                new AntPathRequestMatcher("/api/v1/disposable-keys/**"))
+        );
         this.apiKeyRepository = apiKeyRepository;
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(keySuccessHandler);
@@ -35,7 +42,7 @@ public class ApiKeyAuthenticationFilter extends AbstractAuthenticationProcessing
         var apiKey = extractApiKeyFromHeader(request);
 
         Authentication authentication = null;
-        if (apiKeyRepository.existsByApiKey(apiKey)) {
+        if (apiKeyRepository.existsByApiKeyAndStatus(apiKey, ApiKeyStatus.ACTIVE)) {
             authentication = new KeyAuthentication(apiKey);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
