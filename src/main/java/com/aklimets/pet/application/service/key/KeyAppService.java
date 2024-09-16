@@ -10,12 +10,16 @@ import com.aklimets.pet.domain.dto.response.key.*;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.disposablekey.DisposableKeyRepository;
+import com.aklimets.pet.domain.model.disposablekey.attribute.DisposableKeyState;
 import com.aklimets.pet.domain.model.key.StoredKey;
 import com.aklimets.pet.domain.model.key.StoredKeyFactory;
 import com.aklimets.pet.domain.model.key.StoredKeyRepository;
 import com.aklimets.pet.domain.model.key.keyversion.KeyVersion;
+import com.aklimets.pet.util.datetime.TimeSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.aklimets.pet.domain.model.disposablekey.attribute.DisposableKeyState.DISPOSED;
 
 @ApplicationService
 @AllArgsConstructor
@@ -31,6 +35,8 @@ public class KeyAppService {
     private final StoredKeyRepository storedKeyRepository;
 
     private final DisposableKeyRepository disposableKeyRepository;
+
+    private final TimeSource timeSource;
 
     public GeneratedKeyResponse generate(KeyGenerationRequest request, String apiKey) throws Exception {
         if (storedKeyRepository.existsByApiKeyAndKeyName(apiKey, request.keyName())) {
@@ -80,6 +86,10 @@ public class KeyAppService {
         var keyVersion = getKeyVersion(key, version);
         var disposableKey = disposableKeyRepository.findById(request.disposableKeyId())
                 .orElseThrow(() -> new NotFoundException("Not found", "Disposable key not found"));
+
+        if (disposableKey.getState() == DISPOSED || disposableKey.getValidUntil().isBefore(timeSource.getCurrentLocalDateTime()) ) {
+            throw new BadRequestException("Error", "Disposable key already is disposed or expired");
+        }
 
         var sessionKeyDecrypted = asymmetricKeyUtil.decrypt(request.sessionKey(), disposableKey.getPrivateKey());
         var privateKeyEncrypted = symmetricKeyUtil.encrypt(keyVersion.getKeyPair().getPrivateKey(), sessionKeyDecrypted);
