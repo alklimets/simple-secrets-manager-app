@@ -4,6 +4,7 @@ import com.aklimets.pet.application.service.key.KeyAppService;
 import com.aklimets.pet.domain.dto.authentication.KeyAuthentication;
 import com.aklimets.pet.domain.dto.request.key.KeyGenerationRequest;
 import com.aklimets.pet.domain.dto.response.key.GeneratedKeyResponse;
+import com.aklimets.pet.domain.dto.response.key.StoredKeyDTO;
 import com.aklimets.pet.domain.dto.response.key.StoredKeysResponse;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,10 +32,17 @@ public class KeyController {
     private final KeyAppService keyAppService;
 
     @DefaultSwaggerEndpoint
-    @Operation(summary = "Get ApiKey keys info")
+    @Operation(summary = "Get keys info by ApiKey")
     @GetMapping
-    public StoredKeysResponse getKeys(@AuthenticationPrincipal String apiKey) { // value from principal field in authentication object
+    public StoredKeysResponse getKeys(@AuthenticationPrincipal String apiKey) {
          return keyAppService.getKeys(apiKey);
+    }
+
+    @DefaultSwaggerEndpoint
+    @Operation(summary = "Get keys info by ApiKey")
+    @GetMapping("/{name}")
+    public StoredKeyDTO getKeyByName(@AuthenticationPrincipal String apiKey, @PathVariable String name) {
+         return keyAppService.getKeyByName(apiKey, name);
     }
 
     @DefaultSwaggerEndpoint

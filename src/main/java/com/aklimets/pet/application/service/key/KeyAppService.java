@@ -8,6 +8,7 @@ import com.aklimets.pet.domain.dto.response.key.GeneratedKeyResponse;
 import com.aklimets.pet.domain.dto.response.key.StoredKeyDTO;
 import com.aklimets.pet.domain.dto.response.key.StoredKeysResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
+import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.key.StoredKeyFactory;
 import com.aklimets.pet.domain.model.key.StoredKeyRepository;
 import lombok.AllArgsConstructor;
@@ -50,5 +51,10 @@ public class KeyAppService {
         var apiKeys = storedKeyRepository.findAllByApiKey(apiKey);
         return new StoredKeysResponse(apiKeys);
 
+    }
+
+    public StoredKeyDTO getKeyByName(String apiKey, String name) {
+        return storedKeyRepository.findByApiKeyAndKeyName(apiKey, name)
+                .orElseThrow(() -> new NotFoundException("Key not found", "Key with name " + name + " not found"));
     }
 }
