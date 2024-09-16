@@ -8,4 +8,6 @@ public interface ApiKeyRepository extends MongoRepository<ApiKey, String> {
 
     Optional<ApiKey> findByApiKey(String apiKey);
 
+    boolean existsByApiKey(String apiKey);
+
 }
