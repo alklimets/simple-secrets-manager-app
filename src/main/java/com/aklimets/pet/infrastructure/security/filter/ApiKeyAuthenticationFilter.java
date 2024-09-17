@@ -1,6 +1,6 @@
 package com.aklimets.pet.infrastructure.security.filter;
 
-import com.aklimets.pet.domain.dto.authentication.KeyAuthentication;
+import com.aklimets.pet.domain.model.authentication.KeyAuthentication;
 import com.aklimets.pet.domain.model.apikey.ApiKeyRepository;
 import com.aklimets.pet.domain.model.apikey.attribute.ApiKeyStatus;
 import com.aklimets.pet.infrastructure.security.handler.KeySuccessHandler;

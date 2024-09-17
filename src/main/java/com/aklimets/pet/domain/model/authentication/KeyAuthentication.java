@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.dto.authentication;
+package com.aklimets.pet.domain.model.authentication;
 
 import lombok.Getter;
 import org.springframework.security.core.Authentication;

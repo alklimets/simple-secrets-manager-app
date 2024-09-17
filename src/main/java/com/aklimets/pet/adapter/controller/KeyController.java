@@ -2,7 +2,8 @@ package com.aklimets.pet.adapter.controller;
 
 import com.aklimets.pet.application.service.key.KeyAppService;
 import com.aklimets.pet.domain.dto.request.key.KeyGenerationRequest;
-import com.aklimets.pet.domain.dto.request.key.PrivateKeyRequestDTO;
+import com.aklimets.pet.domain.dto.request.key.PrivateKeyRequest;
+import com.aklimets.pet.domain.dto.request.key.PublicKeyRequest;
 import com.aklimets.pet.domain.dto.response.key.*;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,26 +34,27 @@ public class KeyController {
     @DefaultSwaggerEndpoint
     @Operation(summary = "Get keys info by ApiKey")
     @GetMapping("/{name}")
-    public StoredKeyDTO getKeyByName(@AuthenticationPrincipal String apiKey, @PathVariable String name) {
+    public StoredKeyResponse getKeyByName(@AuthenticationPrincipal String apiKey, @PathVariable String name) {
         return keyAppService.getKeyByName(apiKey, name);
     }
 
     @DefaultSwaggerEndpoint
     @Operation(summary = "Get public key by key name and version for ApiKey")
     @GetMapping("/{name}/public/{version}")
-    public PublicKeyDTO getPublicKeyByNameAndVersion(@AuthenticationPrincipal String apiKey,
-                                                     @PathVariable String name,
-                                                     @PathVariable String version) {
-        return keyAppService.getPublicKeyByNameAndVersion(apiKey, name, version);
+    public PublicKeyResponse getPublicKeyByNameAndVersion(@AuthenticationPrincipal String apiKey,
+                                                          @RequestParam(required = false, defaultValue = "false") boolean includeDisposableKey,
+                                                          @PathVariable String name,
+                                                          @PathVariable String version) {
+        return keyAppService.getPublicKeyByNameAndVersion(new PublicKeyRequest(apiKey, name, version, includeDisposableKey));
     }
 
     @DefaultSwaggerEndpoint
     @Operation(summary = "Get public key by key name and version for ApiKey")
     @PostMapping("/{name}/private/{version}")
-    public PrivateKeyDTO getPrivateKeyByNameAndVersion(@AuthenticationPrincipal String apiKey,
-                                                       @PathVariable String name,
-                                                       @PathVariable String version,
-                                                       @RequestBody PrivateKeyRequestDTO request) throws Exception {
+    public PrivateKeyResponse getPrivateKeyByNameAndVersion(@AuthenticationPrincipal String apiKey,
+                                                            @PathVariable String name,
+                                                            @PathVariable String version,
+                                                            @RequestBody PrivateKeyRequest request) throws Exception {
         return keyAppService.getPrivateKeyByNameAndVersion(apiKey, name, version, request);
     }
 
