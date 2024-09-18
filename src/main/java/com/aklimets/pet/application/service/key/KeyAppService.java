@@ -87,8 +87,6 @@ public class KeyAppService {
     }
 
     public PrivateKeyResponse getPrivateKeyByNameAndVersion(String apiKey, String name, String version, PrivateKeyRequest request) throws Exception {
-        var key = getStoredKey(apiKey, name);
-        var keyVersion = getKeyVersion(key, version);
         var disposableKey = disposableKeyRepository.findById(request.disposableKeyId())
                 .orElseThrow(() -> new NotFoundException("Not found", "Disposable key not found"));
 
@@ -96,6 +94,8 @@ public class KeyAppService {
             throw new BadRequestException("Error", "Disposable key already is disposed or expired");
         }
 
+        var key = getStoredKey(apiKey, name);
+        var keyVersion = getKeyVersion(key, version);
         var sessionKeyDecrypted = asymmetricKeyUtil.decrypt(request.sessionKey(), disposableKey.getPrivateKey());
         var privateKeyEncrypted = symmetricKeyUtil.encrypt(keyVersion.getKeyPair().getPrivateKey(), sessionKeyDecrypted);
 

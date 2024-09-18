@@ -33,7 +33,7 @@ public class SecurityConfig {
 
     private final ApiKeyRepository  apiKeyRepository;
 
-    private KeyAuthenticationProvider keyAuthenticationProvider;
+    private final KeyAuthenticationProvider keyAuthenticationProvider;
 
     private final RequestIdFilter requestIdFilter;
 
